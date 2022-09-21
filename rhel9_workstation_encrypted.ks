@@ -61,7 +61,7 @@ clevis-systemd
 firstboot --disable
 
 # Generated using Blivet version 3.4.0
-ignoredisk --only-use={{disk}}
+ignoredisk --only-use=sda
 # Partition clearing information
 clearpart --none --initlabel
 # Disk partitioning information
