@@ -65,26 +65,6 @@ ignoredisk --only-use=sda
 # Partition clearing information
 clearpart --none --initlabel
 # Disk partitioning information
-part /boot --fstype="xfs" --ondisk=sda --size=1024
-part pv.137 --fstype="lvmpv" --ondisk=sda --grow --encrypted --passphrase='temppass' --luks-version=luks2
-part /boot/efi --fstype="efi" --ondisk=sda --size=600 --fsoptions="umask=0077,shortname=winnt"
-volgroup rhel --pesize=4096 pv.1078
-logvol /home --fstype="xfs" --percent=8 --name=home --vgname=rhel
-logvol /var --fstype="xfs" --percent=8 --name=var --vgname=rhel
-logvol /tmp --fstype="xfs" --percent=8 --name=tmp --vgname=rhel
-logvol swap --fstype="swap" --size=4036 --name=swap --vgname=rhel
-logvol /var/log --fstype="xfs" --percent=10 --name=var_log --vgname=rhel
-logvol /var/log/audit --fstype="xfs" --percent=8 --name=var_log_audit --vgname=rhel
-logvol /var/tmp --fstype="xfs" --percent=8 --name=var_tmp --vgname=rhel
-logvol / --fstype="xfs" --percent=40 --name=root --vgname=rhel
-
-
-
-# Generated using Blivet version 3.4.0
-ignoredisk --only-use=sda
-# Partition clearing information
-clearpart --none --initlabel
-# Disk partitioning information
 part pv.1078 --fstype="lvmpv" --ondisk=sda --size=49162 --encrypted --luks-version=luks2
 part /boot --fstype="xfs" --ondisk=sda --size=1024
 part /boot/efi --fstype="efi" --ondisk=sda --size=600 --fsoptions="umask=0077,shortname=winnt"
