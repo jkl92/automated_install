@@ -87,11 +87,18 @@ rootpw --iscrypted $6$khyrK8aoPudRnFy4$yPv83XCQ9tVgoSpsC6.YsVJrcE7P6iQd3cOiFd1vM
 #rootpw --lock
 user --groups=wheel --name=install_user --password=$6$Tv2ko9/nD/RGG5TI$kM.5TiKQj4pCGsu5DYlAOVSvI8RgJKL00GFmxcnelS.wlXxj/nc/Y4iSKK1RTG7zf13HnMr8v7I6HBu7thVHY. --iscrypted --gecos="install_user"
 
+reboot
+
 %post
-#dnf install -y clevis-dracut clevis-luks clevis-systemd
+#
 clevis luks bind -k - -d /dev/sda3 tpm2 '{"hash":"sha1","key":"rsa"}' <<< 'temppass'
 dracut -fv --regenerate-all
-#KERNEL_VERSION=$(rpm -q kernel --qf '%{version}-%{release}.%{arch}\n')
-#/sbin/dracut -fv --regenerate-all /boot/initramfs-$KERNEL_VERSION.img $KERNEL_VERSION
-reboot
+
+# add install_user public key
+mkdir /home/install_user/.ssh
+chmod 700 /home/install_user/.ssh
+touch /home/install_user/.ssh/authorized_keys
+echo 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDLtdnWVvIvdQ22wTg0pjwDSW/AxqWxVkC6yGINIipY29cdEj7yackIHHlu2Wdlok8haXXgnY/ZfAE2peS9dHNOsIZvspp8lYupedu+GA2ebsn+LR+6Sj1tDyHITPvsZz+Yq722r+s3DgsniG3LYgtkO87lBDpl/XsWZSThFbJ//Ps8pConX3yTC6OA0tNjF8FaEgdWKUsWKBTF1HXcw5xF8HA1OpPcUs92uxiLXZRpcTci+2soYi8gKehO6bjMgnY1IGMMIzwhPzKv8HExe4UpcmD6DhoZsFsHwsJZKxSdGDBVqcOXgZleHobIsUjlbtU3rTy/P2+HV75+jQOrLJix' > /home/install_user/.ssh/authorized_keys
+chmod 400 /home/install_user/.ssh/authorized_keys
+chown -R install_user: /home/install_user/
 %end
