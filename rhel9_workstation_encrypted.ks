@@ -78,7 +78,6 @@ logvol /var/log/audit --fstype="xfs" --percent=8 --name=var_log_audit --vgname=r
 logvol /var/tmp --fstype="xfs" --percent=8 --name=var_tmp --vgname=rhel_test
 logvol / --fstype="xfs" --percent=40 --name=root --vgname=rhel_test
 
-
 # System timezone
 timezone America/Detroit --utc
 
@@ -90,10 +89,6 @@ user --groups=wheel --name=install_user --password=$6$Tv2ko9/nD/RGG5TI$kM.5TiKQj
 reboot
 
 %post
-#
-clevis luks bind -k - -d /dev/sda3 tpm2 '{"hash":"sha1","key":"rsa"}' <<< 'temppass'
-dracut -fv --regenerate-all
-
 # add install_user public key
 mkdir /home/install_user/.ssh
 chmod 700 /home/install_user/.ssh
@@ -101,4 +96,8 @@ touch /home/install_user/.ssh/authorized_keys
 echo 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDLtdnWVvIvdQ22wTg0pjwDSW/AxqWxVkC6yGINIipY29cdEj7yackIHHlu2Wdlok8haXXgnY/ZfAE2peS9dHNOsIZvspp8lYupedu+GA2ebsn+LR+6Sj1tDyHITPvsZz+Yq722r+s3DgsniG3LYgtkO87lBDpl/XsWZSThFbJ//Ps8pConX3yTC6OA0tNjF8FaEgdWKUsWKBTF1HXcw5xF8HA1OpPcUs92uxiLXZRpcTci+2soYi8gKehO6bjMgnY1IGMMIzwhPzKv8HExe4UpcmD6DhoZsFsHwsJZKxSdGDBVqcOXgZleHobIsUjlbtU3rTy/P2+HV75+jQOrLJix' > /home/install_user/.ssh/authorized_keys
 chmod 400 /home/install_user/.ssh/authorized_keys
 chown -R install_user: /home/install_user/
+
+# use tpm2 to unlock disk automatically
+clevis luks bind -k - -d /dev/sda3 tpm2 '{"hash":"sha1","key":"rsa"}' <<< 'temppass'
+dracut -fv --regenerate-all
 %end
