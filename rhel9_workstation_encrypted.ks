@@ -87,9 +87,9 @@ rootpw --iscrypted $6$khyrK8aoPudRnFy4$yPv83XCQ9tVgoSpsC6.YsVJrcE7P6iQd3cOiFd1vM
 #rootpw --lock
 user --groups=wheel --name=install_user --password=$6$Tv2ko9/nD/RGG5TI$kM.5TiKQj4pCGsu5DYlAOVSvI8RgJKL00GFmxcnelS.wlXxj/nc/Y4iSKK1RTG7zf13HnMr8v7I6HBu7thVHY. --iscrypted --gecos="install_user"
 
-# %post
-# dnf install -y clevis-dracut clevis-luks clevis-systemd
-# clevis luks bind -k - -d /dev/sda3 tpm2 '{"hash":"sha1","key":"rsa"}' <<< 'temppass'
-# dracut -fv --regenerate-all
-# reboot
-# %end
+%post
+dnf install -y clevis-dracut clevis-luks clevis-systemd
+clevis luks bind -k - -d /dev/sda3 tpm2 '{"hash":"sha1","key":"rsa"}' <<< 'temppass'
+dracut -fv --regenerate-all
+reboot
+%end
