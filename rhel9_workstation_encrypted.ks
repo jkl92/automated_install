@@ -66,9 +66,9 @@ ignoredisk --only-use=sda
 clearpart --none --initlabel
 # Disk partitioning information
 part /boot --fstype="xfs" --ondisk=sda --size=1024
-part pv.137 --fstype="lvmpv" --ondisk=sda --grow --encrypted --passphrase='temppass' --luks-version=luks2
 part /boot/efi --fstype="efi" --ondisk=sda --size=600 --fsoptions="umask=0077,shortname=winnt"
-volgroup rhel_test --pesize=4096 pv.1078
+part pv.308 --fstype="lvmpv" --ondisk=sda --grow --encrypted --passphrase='temppass' --luks-version=luks2
+volgroup rhel_test --pesize=4096 pv.308
 logvol /home --fstype="xfs" --percent=8 --name=home --vgname=rhel_test
 logvol /var --fstype="xfs" --percent=8 --name=var --vgname=rhel_test
 logvol /tmp --fstype="xfs" --percent=8 --name=tmp --vgname=rhel_test
@@ -86,8 +86,8 @@ timezone America/Detroit --utc
 rootpw --iscrypted $6$khyrK8aoPudRnFy4$yPv83XCQ9tVgoSpsC6.YsVJrcE7P6iQd3cOiFd1vMSAVpDA7TqZHoQX.Mz0TSh.TE66/.VS/ZwpaHA6kWboWb/
 user --groups=wheel --name=ansible_user --password=$6$LSGHLICmHAAuKGc/$yrrv4051kwLQ3pUcFt6RaOGwywAt0MLSiJHGglE/HYdklkKhJ2pPViNf1ET9hUgND23SfDoLpVfqSPft7xiI7. --iscrypted --gecos="ansible_user"
 
-%post
-clevis luks bind -k - -d /dev/sda3 tpm2 '{"hash":"sha1","key":"rsa"}' <<< 'temppass'
-dracut -fv --regenerate-all
-reboot
-%end
+# %post
+# clevis luks bind -k - -d /dev/sda3 tpm2 '{"hash":"sha1","key":"rsa"}' <<< 'temppass'
+# dracut -fv --regenerate-all
+# reboot
+# %end
